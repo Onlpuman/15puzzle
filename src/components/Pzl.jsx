@@ -1,39 +1,85 @@
-import { useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import { Square } from "./Square";
-import {Transition, CSSTransition, SwitchTransition, TransitionGroup} from "react-transition-group";
-
-const emptyElement = 'empty';
+import { emptyElementId, winBoard } from '../constants';
+import { setValue } from '../reducer/counterSlice';
+import { setBoard } from '../reducer/fieldSlice';
+import { setStart, setWin } from '../reducer/timerSlice';
 
 export const Pzl = () => {
-	const [field, setField] = useState([emptyElement, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
+	const { board } = useSelector((state) => state.field);
+	const { isTimerStarted } = useSelector((state) => state.timer);
+	const dispatch = useDispatch();
+	
+	const onSquareClick = (id) => {	
+		const innerWidth = window.innerWidth;
+		let itemSize = null;
+		if (innerWidth > 425){
+			itemSize = 100;
+		} else if (innerWidth <= 425 && innerWidth > 320 ){
+			itemSize = 80;
+		} else if (innerWidth <= 320  && innerWidth > 280 ){
+			itemSize = 72;
+		} else if (innerWidth <= 280){
+			itemSize = 64;
+		}
 
-	// const onSquareClick = (element) => {
-	// 	const elementIndex = field.indexOf(element);
-	// 	const emptyElementIndex = field.indexOf(emptyElement);
-	// 	console.log(elementIndex)
-		
-	// 	if (
-	// 		(elementIndex - 1 == emptyElementIndex && ![3, 7, 11].includes(emptyElementIndex))
-	// 		|| (elementIndex + 1 == emptyElementIndex && ![4, 8, 12].includes(emptyElementIndex))
-	// 		|| elementIndex - emptyElementIndex == 4
-	// 		|| emptyElementIndex - elementIndex == 4
-	// 	) {
-	// 		const copy = [...field];
-	// 		copy.splice(elementIndex, 1, emptyElement);
-	// 		copy.splice(emptyElementIndex, 1, element);
+		if (
+			(board[emptyElementId].top - board[id].top) === itemSize && (board[emptyElementId].left - board[id].left) === 0
+			|| (board[id].top - board[emptyElementId].top) === itemSize && (board[emptyElementId].left - board[id].left) === 0
+			|| (board[emptyElementId].top - board[id].top) === 0 && (board[id].left - board[emptyElementId].left) === itemSize
+			|| (board[emptyElementId].top - board[id].top) === 0 && (board[emptyElementId].left - board[id].left) === itemSize
+		) {
+			dispatch(setValue());
+
+			if(!isTimerStarted){
+				dispatch(setStart({isTimerStarted:true}));
+			}
+
+			const copy = [...board];
+
+			copy[emptyElementId] = {
+				...board[id],
+				id: emptyElementId,
+			};
 			
-	// 		setField(copy);
-	// 	}
-	// };
+			copy[id] = {
+				...board[emptyElementId],
+				id,
+			};
 
+			dispatch(setBoard({copy}));
+			
+			let win = false;
+			for(let i = 0; i <= 15; i++){
+				if(
+					copy[i].top === winBoard[i].top &&
+					copy[i].left === winBoard[i].left
+				){
+					win = true;
+				} else {
+					win = false;
+					break;
+				}
+			}
+			
+			if (win === true){
+				dispatch(setStart({isTimerStarted: false}));
+				dispatch(setWin({isWin: true}));
+			}
+		}
+	};
+	
 	return (
 		<div className="pzl">
-			{field.map((element) => {
+			{board.map(({id, top, left}) => {
+
 				return (
 					<Square
-						key={ element }
-						id={ element }
-						onClick={ onSquareClick }
+						key={`square-${id}`}
+						top={top}
+						left={left}
+						id={id}
+						onClick={onSquareClick}
 					/>
 				)
 			})}
