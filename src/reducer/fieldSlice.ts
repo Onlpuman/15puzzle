@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { generateBoard, winBoard } from '../constants';
+import { generateBoard } from '../constants';
 import { IItem } from '../constants';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
@@ -9,12 +9,8 @@ interface IFieldState {
 	board: IItem[];
 }
  
-// const initialState: IFieldState = {
-// 	board: generateBoard(16),
-// };
-
 const initialState: IFieldState = {
-	board: winBoard,
+	board: generateBoard(16),
 };
 
 export const fieldSlice = createSlice({
