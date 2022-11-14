@@ -22,7 +22,7 @@
 		"react-transition-group": "^4.4.2",
 		"redux": "^4.2.0",
 		"sass": "^1.50.1",
-		"serve": "^13.0.2",
+		"serve": "^14.1.1",
 		"web-vitals": "^2.1.4"
 	},
 	"scripts": {
