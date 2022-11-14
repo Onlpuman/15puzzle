@@ -1,10 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { generateBoard, winBoard } from '../constants';
-// const initialState: IFieldState = {
-// 	board: generateBoard(16),
-// };
+import { generateBoard } from '../constants';
 const initialState = {
-    board: winBoard,
+    board: generateBoard(16),
 };
 export const fieldSlice = createSlice({
     name: 'field',
