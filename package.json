@@ -3,14 +3,19 @@
 	"name": "15puzzle",
 	"version": "0.1.0",
 	"private": true,
+	"type": "module",
 	"dependencies": {
 		"@reduxjs/toolkit": "^1.8.2",
 		"@testing-library/jest-dom": "^5.16.4",
 		"@testing-library/react": "^13.1.1",
 		"@testing-library/user-event": "^13.5.0",
-		"bootstrap": "^5.1.3",
+		"@types/jest": "^29.2.2",
+		"@types/node": "^18.11.9",
+		"@types/react-dom": "^18.0.8",
+		"@types/react-redux": "^7.1.24",
+		"bootstrap": "^5.2.2",
 		"react": "^18.0.0",
-		"react-bootstrap": "^2.4.0",
+		"react-bootstrap": "^2.6.0",
 		"react-dom": "^18.0.0",
 		"react-redux": "^8.0.2",
 		"react-scripts": "5.0.1",
@@ -24,16 +29,12 @@
 		"predeploy": "npm run build",
 		"deploy": "gh-pages -d build",
 		"start": "react-scripts start",
-		"build": "react-scripts build",
+		"build": "tsc",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"serve": "serve -s build"
-	},
-	"eslintConfig": {
-		"extends": [
-			"react-app",
-			"react-app/jest"
-		]
+		"serve": "serve -s build",
+		"lint": "eslint -c .eslintrc --ext .js,.jsx,.ts,.tsx .",
+		"lint:fix": "npm run lint -- --fix"
 	},
 	"browserslist": {
 		"production": [
@@ -48,6 +49,8 @@
 		]
 	},
 	"devDependencies": {
-		"gh-pages": "^4.0.0"
+		"@types/react": "^18.0.25",
+		"gh-pages": "^4.0.0",
+		"typescript": "^4.8.4"
 	}
 }
